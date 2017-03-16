@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '/home/17766467/Desktop/home_projects/SpeedTester/src')
+
 from file_io.csv_writer import CSVFileWriter
 from file_io.util import *
 from view.ui import *
