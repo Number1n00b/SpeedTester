@@ -33,6 +33,7 @@ Build dependecies
 
 Runtime Dependencies:
  - plotly
+ 
 '''
 To get plotly, use:
   'pip install plotly'
