@@ -1,54 +1,52 @@
-from tkinter import *
 import tkinter
 import tkinter.messagebox as tmb
-from errors.calling_errors import *
-from speed_test.SpeedTester import *
+from tkinter import *
 
+from errors.calling_errors import *
+from controller.SpeedTester import *
 from plotting import *
 
-class ui(object):
 
-    def __init__(self, sigM, online_graph, local_graph):
+class Ui(object):
+
+    def __init__(self, online_graph_function, local_graph_function):
         self.fin_init = False
-        self.make_online = online_graph
-        self.make_local = local_graph
-        self.mainSig = sigM
-        self.run()
+        self.make_online = online_graph_function
+        self.make_local = local_graph_function
 
-    def printStop(self):
-        print("Stopped")
-
-    def run(self):
+        # Create the window.
         self.top = Tk()
-        # Declaring Stringvars:
         self.top.title("Speed Tester")
+        self.top.resizable(0, 0)
+
+        # Declaring StringVars:
         self.last_completed_run = StringVar()
         self.latest_speed = StringVar()
         self.next_run = StringVar()
         self.delay = StringVar()
         self.status = StringVar()
-        self.top.resizable(0, 0)
-
-        top = self.top
 
         # Initialising StringVars
         self.last_completed_run.set("None")
-
         self.latest_speed.set(0)
-
         self.next_run.set(0)
-
+        self.delay.set("N/A")
         self.status.set("Inactive.")
 
-        # Setting up the interface. Grid is in total 2x5
+        self.run()
 
+    def run(self):
+        # For convenience.
+        top = self.top
+
+        # Setting up the interface. Grid is in total 2x5
         # Column1. Lables in this order:
         Label(top, text="Last successful run: ").grid(row=1, column=1)
         Label(top, text="Last speed (Mb/s): ").grid(row=2, column=1)
         Label(top, text="Next run (s): ").grid(row=3, column=1)
         Label(top, text="Delay (s): ").grid(row=4, column=1)
 
-        # Column2. The values for each column and a "run now" button.
+        # Column2. The values for each column.
         Label(top, textvariable=self.last_completed_run).grid(row=1, column=2)
         Label(top, textvariable=self.latest_speed).grid(row=2, column=2)
         Label(top, textvariable=self.next_run).grid(row=3, column=2)
@@ -67,6 +65,7 @@ class ui(object):
             child.grid_configure(padx=5, pady=5)
 
         self.fin_init = True
+
         try:
             self.main_class = SpeedTester(self)
             self.delaynum = self.main_class.delay
@@ -92,26 +91,20 @@ class ui(object):
         except Exception as e2:
             tmb.showinfo("Error", str(e2))
 
-
     def close_threads(self):
         self.main_class.running = False
         self.top.destroy()
 
-    def change_delay(self, new):
-        self.delay.set(new)
-    def update_next(self, time):
+    def update_ui_next(self, time):
         self.next_run.set(str(time))
 
-    def set_values(self, run_time, speed):
+    def set_ui_values(self, run_time, speed):
         self.last_completed_run.set(run_time)
         self.latest_speed.set(speed)
 
     def set_status(self, inStat):
         self.status.set(inStat)
 
-    def setDelay(self, newDelay):
+    def set_delay(self, newDelay):
         self.delaynum = newDelay
         self.delay.set(newDelay)
-
-    def getSignal(self):
-        return self.mainSig

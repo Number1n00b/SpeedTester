@@ -2,8 +2,6 @@ from cx_Freeze import setup, Executable
 
 import os
 
-
-
 os.environ['TCL_LIBRARY'] = "F:\\Installs\\NewPython\\tcl\\tcl8.6"
 os.environ['TK_LIBRARY'] = "F:\\Installs\\NewPython\\tcl\\tk8.6"
 
@@ -20,5 +18,5 @@ setup(
     name = "Test",
     version = "1.0",
     options = {"build_exe": {"includes": includes, "include_files": include_files}},
-    executables = [Executable("../src/speed_test/SpeedTester.py", base="Win32GUI")]
+    executables = [Executable("../src/controller/SpeedTester.py", base="Win32GUI")]
 )

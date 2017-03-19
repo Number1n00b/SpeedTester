@@ -1,29 +1,27 @@
-import sys
-sys.path.insert(0, '/home/17766467/Desktop/home_projects/SpeedTester/src')
-
-from file_io.csv_writer import CSVFileWriter
-from file_io.util import *
-from view.ui import *
-
-from errors.calling_errors import *
-
-from plotting.plotter import *
-
-from connection import speedtest
+import threading
 import signal
 import time
 import os
-import threading
 
-mainDelay = 1200
+import view.ui
+from file_io.util import *
+from file_io.csv_writer import CSVFileWriter
+
+from errors.calling_errors import *
+from plotting.plotter import *
+
+from speedtester import speedtest
+
+success_delay = 1200
 failureDelay = 300
+main_signal = 0
 
-# A horrible hack that took me forever to do. The reason I had to hack it was because both the speedtest.py module
+# A hack. The reason I had to do it was because both the speedtest.py module
 # and the tkinter module for some reason expect to be in main and to be in full control of main. (speedtest indirecty
 # expected this because of using the signal.py module.
 #
 # Now, since I'm running two threads, one of them obviously cant be main, so I ended up moving tkinter to main, creating
-# the signal in main (before initialising the ui) and then passing the signal to the ui module so that the signal THINKS
+# the signal in main (before initialising the view) and then passing the signal to the view module so that the signal THINKS
 # it's in main when it really isn't.
 #
 # I could have also just left it as is and just let the program crash whenever the user clicks close....
@@ -40,9 +38,9 @@ class SpeedTester(threading.Thread):
         self.header = "date,time,ping,down,up,isp,ip,lat,long"
 
         self.running = True
-        self.prevRun = True
+        self.previous_run_success = True
 
-        self.delay = mainDelay
+        self.delay = success_delay
 
         while not self.window.fin_init:
             time.sleep(0.5)
@@ -60,53 +58,51 @@ class SpeedTester(threading.Thread):
                     self.window.set_status("Waiting.")
 
                 i = self.delay
-                self.updateUITimer(i)
+                self.update_UITimer(i)
                 while i > 0:
                     if not self.running:
                         break
                     time.sleep(1)
                     i -= 1
-                    self.updateUITimer(i)
+                    self.update_UITimer(i)
             except Exception as e:
                 self.write_failure(e)
                 raise e
         print("Finished scheduler.")
 
-    def setDelay(self, newDelay):
-        self.delay = newDelay
+    def set_delay(self, new_delay):
+        self.delay = new_delay
         if self.running:
-            self.window.setDelay(newDelay)
+            self.window.set_delay(new_delay)
 
-
-    def updateUITimer(self, time):
+    def update_UITimer(self, new_time):
         if self.running:
-            self.window.update_next(time)
-
+            self.window.update_ui_next(new_time)
 
     def test_and_write(self):
         try:
-            data = speedtest.shell(self.window.getSignal())
+            data = speedtest.shell(main_signal)
             if not data:
                 self.write_failure("Connection cannot be established.")
             else:
-                self.updateUI(data)
+                self.update_ui(data)
                 self.write_data(data)
-                self.setDelay(mainDelay)
-                self.prevRun = True
+                self.set_delay(success_delay)
+                self.previous_run_success = True
         except Exception as e:
             self.write_failure(e)
             raise e
 
-    def my_fail(self, e):
+    def handle_test_exception(self, e):
         print("Failed: " + str(e) + "\n")
-        self.setDelay(failureDelay)
-        self.prevRun = False
+        self.set_delay(failureDelay)
+        self.previous_run_success = False
 
-    def updateUI(self, data):
+    def update_ui(self, data):
         currdate, currtime = getDateTime()
         date_and_time = currdate + " | " + currtime
         if self.running:
-            self.window.set_values(date_and_time, data['down'][0:5])
+            self.window.set_ui_values(date_and_time, data['down'][0:5])
 
     def write_data(self, data):
         currdate, currtime = getDateTime()
@@ -128,7 +124,7 @@ class SpeedTester(threading.Thread):
             self.write_failure(e)
 
     def write_failure(self, error):
-        self.my_fail(error)
+        self.handle_test_exception(error)
         if not self.running:
             return 0
 
@@ -153,17 +149,22 @@ class SpeedTester(threading.Thread):
             try:
                 file.close()
             except Exception as e:
-                self.my_fail(e)
+                self.handle_test_exception(e)
         except Exception as e2:
-            self.my_fail(e2)
+            self.handle_test_exception(e2)
 
 
-def stop():
+def stop(signum, frame):
     print("stopped")
+    print("Info: " + str(signum) + ", " + str(frame))
 
 
+# A placeholder function for creating an online plot, since I have not implemented it yet.
 def unimp(): raise UnimplementedError
 
 if __name__ == "__main__":
-    siggyM = signal.signal(signal.SIGINT, stop)
-    ui(siggyM, unimp, do_plot)
+    # Create the signal to use for speed tests.
+    main_signal = signal.signal(signal.SIGINT, handler=stop)
+
+    # Create the UI.
+    view.ui.Ui(unimp, do_plot)

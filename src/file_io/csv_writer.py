@@ -1,4 +1,9 @@
 class CSVFileWriter:
+    """
+    Created by Christian on 21/12/2016.
+
+    A general purpose CSV file writer.
+    """
 
     def __init__(self, file):
         """

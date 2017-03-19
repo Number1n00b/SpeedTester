@@ -272,7 +272,7 @@ class ShareResultsConnectFailure(SpeedtestException):
 
 class ShareResultsSubmitFailure(SpeedtestException):
     """Unable to successfully POST results to speedtest.net API after
-    connection
+    speedtester
     """
 
 
@@ -397,7 +397,7 @@ def build_request(url, data=None, headers=None, bump=''):
 
 def catch_request(request):
     """Helper function to catch common exceptions encountered when
-    establishing a connection with a HTTP/HTTPS request
+    establishing a speedtester with a HTTP/HTTPS request
 
     """
 
@@ -1262,7 +1262,7 @@ def printer(string, quiet=False, debug=False, **kwargs):
         print_(out, **kwargs)
 
 
-def shell(siggy):
+def shell(signal):
     """Run the full speedtest.net test"""
 
     global SHUTDOWN_EVENT, SOURCE, SCHEME, DEBUG
@@ -1425,7 +1425,8 @@ def shell(siggy):
 
 def main():
     try:
-        shell()
+        sig = signal.signal(signal.SIGINT, handler=ctrl_c)
+        shell(sig)
     except KeyboardInterrupt:
         pass
         # print_('\nCancelling...')

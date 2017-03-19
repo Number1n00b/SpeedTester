@@ -10,6 +10,7 @@ def get_path(*args):
     return path
 
 
+# @Robustness @Hardcoded
 def get_path_in_res(*parts):
     path = ".." + _pathsep + "res"
     for arg in parts:

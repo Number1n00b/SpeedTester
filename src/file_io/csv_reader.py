@@ -149,7 +149,7 @@ class CSVFileReader(object):
                 In conclusion:
                 The only way I could see to fix the problem was to check the next line and make sure that it isn't
                 just a newline character, and if it is, just read it and continue without seeking back.
-                TODO - Find a better way to seek through the file and check for EOF.
+                @TODO @Hack @Cleanup - Find a better way to seek through the file and check for EOF.
                 """
 
                 line = self._file.readline()
@@ -181,6 +181,7 @@ class CSVHeaderReader(CSVFileReader):
         - Automatic header checking. (Ensures each row has the right number of columns)
         - Ability to read only specific columns.
     """
+
     def __init__(self, file_name):
         """
         Standard constructor.
