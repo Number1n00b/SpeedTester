@@ -25,7 +25,7 @@ like 20Mb/s on an average day (With a max of 60). After many complaints to telst
 to give them proof of our inconsistant and slow speeds. 
 They apologised once they saw the eveidence and gave us a $20 discount PER MONTH. 
 
-Build Description and Dependancies (CURRENTLY NOT WORKING)
+Build and Dependancies (CURRENTLY NOT WORKING)
 ----------------------------------------------------------
 
 Build dependecies
@@ -33,6 +33,8 @@ Build dependecies
 
 Runtime Dependencies:
  - plotly
+   To get plotly, use pip install plotly OR sudo pip install plotly. (See https://plot.ly/python/getting-started/ for more details)
+ 
 
 From ".../scripts":
   maxeCXFreeze.bat
