@@ -16,32 +16,36 @@ This tool:
   - Allows for instalation using cxFreeze. 
   - Tested on Windows 64 bit.
 
+Use Case
+--------
+I live in Australia and have Telstra as my ISP. We are on the NBN with an internet plan of 100Mb/s upload.
+The cost of our plan is $95 per month. We never reach the 100Mb/s speed in practise, and generally it is more
+like 20Mb/s on an average day (With a max of 60). After many complaints to telstra, I decided to write this program
+to give them proof of our inconsistant and slow speeds. 
+They apologised once they saw the eveidence and gave us a $20 discount PER MONTH. 
 
-Build Description and Dependancies
-----------------------------------
-
-CURRENTLY NOT WORKING
+Build Description and Dependancies (CURRENTLY NOT WORKING)
+----------------------------------------------------------
 
 Build dependecies
- - xcFreeze
+ - cxFreeze
 
 Runtime Dependencies:
  - plotly
-
 
 From ".../scripts":
   maxeCXFreeze.bat
   
 Usage
 -------
-python src/speed_test/SpeedTester.py
+python src/controller/SpeedTester.py
 
 CURRENTLY NOT WORKING
 Run the .exe created by the build script. (Found in '.../dist/src')
 
 Contribution
 ------------
-If you want to contribute to solcign a bug, unexpected behaviour or if you have a interesting feature
+If you want to contribute to solvign a bug, fixing unexpected behaviour or if you have a interesting feature
 in your mind which fits to this tool, please add an issue / feature request.
 
 Pull requests are always welcome.
