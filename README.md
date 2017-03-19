@@ -33,10 +33,10 @@ Build dependecies
 
 Runtime Dependencies:
  - plotly
-   To get plotly, use 
-       pip install plotly 
+   To get plotly, use:
+       'pip install plotly'
         OR 
-       sudo pip install plotly. 
+       'sudo pip install plotly'
    (See https://plot.ly/python/getting-started/ for more details)
  
 
