@@ -1,5 +1,8 @@
 # SpeedTester
 =================
+
+Intorduction
+-------------
 This is a small python based UI which uses SpeedTest.net to test the user's internet speed at regular intervals. 
 The data is logged to a csv file and the user can easily create a plot of the data for visual inspection.
 
@@ -17,6 +20,8 @@ This tool:
 Build Description and Dependancies
 ----------------------------------
 
+CURRENTLY NOT WORKING
+
 Build dependecies
  - xcFreeze
 
@@ -29,6 +34,9 @@ From ".../scripts":
   
 Usage
 -------
+python src/speed_test/SpeedTester.py
+
+CURRENTLY NOT WORKING
 Run the .exe created by the build script. (Found in '.../dist/src')
 
 Contribution
