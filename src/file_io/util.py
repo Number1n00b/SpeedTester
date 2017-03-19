@@ -1,4 +1,5 @@
 import datetime
+import os
 
 _pathsep = '/'
 
@@ -10,9 +11,11 @@ def get_path(*args):
     return path
 
 
-# @Robustness @Hardcoded
 def get_path_in_res(*parts):
-    path = ".." + _pathsep + "res"
+    res_dir = os.path.realpath(__file__ + "\\..\\..\\..\\res")
+
+    path = res_dir
+
     for arg in parts:
         path += _pathsep + arg
     return path

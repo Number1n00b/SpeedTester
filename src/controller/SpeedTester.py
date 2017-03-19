@@ -3,6 +3,10 @@ import signal
 import time
 import os
 
+# Append the path of the project so that the files can be found.
+import sys
+sys.path.append(os.path.realpath(__file__) + "\\..\\..")
+
 import view.ui
 from file_io.util import *
 from file_io.csv_writer import CSVFileWriter
@@ -35,7 +39,7 @@ class SpeedTester(threading.Thread):
         self.window = uiG
         self.results_file_name = get_path_in_res("Speedtest_Results.txt")
         self.error_file_name = get_path_in_res("ErrorLog.txt")
-        self.header = "date,time,ping,down,up,isp,ip,lat,long"
+        self.header = "date,time,ping,down,up"
 
         self.running = True
         self.previous_run_success = True
@@ -106,8 +110,9 @@ class SpeedTester(threading.Thread):
 
     def write_data(self, data):
         currdate, currtime = getDateTime()
-        line = makecsv(currdate, currtime, data['ping'][0:5], data['down'][0:5], data['up'][0:5], data['isp'], data['ip'], data['lat'],
-                       data['long'])
+        #line = makecsv(currdate, currtime, data['ping'][0:5], data['down'][0:5], data['up'][0:5], data['isp'], data['ip'], data['lat'],
+        #               data['long'])
+        line = makecsv(currdate, currtime, data['ping'][0:5], data['down'][0:5], data['up'][0:5])
 
         try:
             if os.path.isfile(self.results_file_name):

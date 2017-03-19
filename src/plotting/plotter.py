@@ -28,7 +28,6 @@ def do_plot():
     ping = []
 
     # Put the loaded data into separate fields in order to graph them.
-    # @Hardcoded, expects the file to be in a certain format. ie. Date, time, ping, down, up
     for row in loaded_data:
         # Exclude failures. @ TODO: Make this plot 0's so that you can still visually see failures on the graph.
         if not row[3] == "FAILED":

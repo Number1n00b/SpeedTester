@@ -210,7 +210,7 @@ class CSVHeaderReader(CSVFileReader):
         parts = super(CSVHeaderReader, self).readline()
 
         # If the file does not contain a value for each column, the format is invalid.
-        if len(parts) != len(self._header):
+        if len(parts) != len(column_names_to_read):
             raise InvalidFileFormatError("The file contained an invalid number of columns at line: "
                                          + str(self._linenum)
                                          + ". Expected: " + str(len(self._header))
