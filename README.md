@@ -15,6 +15,7 @@ This tool:
      e.g Use regular intervals of 15 minutes, if previous test failed, test again in 5 minutes.
   - Allows for instalation using cxFreeze. 
   - Tested on Windows 64 bit.
+  - Displays results in Mb/s.
 
 Use Case
 --------
@@ -39,6 +40,8 @@ From ".../scripts":
 Usage
 -------
 python src/controller/SpeedTester.py
+
+NOTE: All speed results are displayed in Mb/s.
 
 CURRENTLY NOT WORKING
 Run the .exe created by the build script. (Found in '.../dist/src')
