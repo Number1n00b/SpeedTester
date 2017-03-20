@@ -1,0 +1,2 @@
+def CUI(object):
+    pass

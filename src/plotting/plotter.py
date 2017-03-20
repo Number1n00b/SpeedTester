@@ -14,7 +14,7 @@ def do_plot():
     """
 
     # @Hardcoded, make this more general.
-    plotfile = get_path_in_res('SpeedTest_plot.html')
+    plot_file = get_path_in_res('SpeedTest_plot.html')
     data_file = get_path_in_res('Speedtest_Results.txt')
 
     # Read the data.
@@ -67,7 +67,7 @@ def do_plot():
     )
 
     fig = Figure(data=data, layout=layout)
-    plot_url = plotly.offline.plot(fig, filename=plotfile)
+    plot_url = plotly.offline.plot(fig, filename=plot_file)
 
 
 def parse_datetime(date_time):
