@@ -1,18 +1,19 @@
-import tkinter
 import tkinter.messagebox as tmb
 from tkinter import *
 
 from errors.calling_errors import *
-from controller.SpeedTester import *
-from plotting import *
 
+from controller import scheduler
 
-class Ui(object):
+class GUI(object):
 
-    def __init__(self, online_graph_function, local_graph_function):
-        self.fin_init = False
-        self.make_online = online_graph_function
-        self.make_local = local_graph_function
+    def __init__(self, plot_online_callback, plot_local_callback, test_scheduler):
+        self.running = False
+
+        self.test_scheduler = test_scheduler
+
+        self.make_online_graph = plot_online_callback
+        self.make_local_graph = plot_local_callback
 
         # Create the window.
         self.top = Tk()
@@ -57,54 +58,53 @@ class Ui(object):
         Label(top, textvariable=self.status).grid(row=6, column=2)
 
         # Buttons for creating the graph.
-        Button(top, text="Create graph (online)", command=self.try_online).grid(row=7, column=1)
-        Button(top, text="Create graph (local)", command=self.try_local).grid(row=7, column=2)
+        Button(top, text="Create graph (online)", command=self.protected_graph_online).grid(row=7, column=1)
+        Button(top, text="Create graph (local)", command=self.protected_graph_local).grid(row=7, column=2)
 
         # Finishing touches.
         for child in top.winfo_children():
             child.grid_configure(padx=5, pady=5)
 
-        self.fin_init = True
+        self.running = True
 
+        self.test_scheduler.add_ui_elements(self)
+
+        top.mainloop()
+
+        self.test_scheduler.exit()
+
+        print("GUI exiting.")
+
+        self.running = False
+
+    def protected_graph_local(self):
         try:
-            self.main_class = SpeedTester(self)
-            self.delaynum = self.main_class.delay
-            self.top.mainloop()
-        except Exception as e:
-            print("SAVED!")
-        print("Finished top.mainloop")
-
-        self.main_class.running = False
-        return ""
-
-    def try_online(self):
-        self.tryRun(self.make_online)
-
-    def try_local(self):
-        self.tryRun(self.make_local)
-
-    def tryRun(self, func):
-        try:
-            func()
+            self.make_local_graph()
         except UnimplementedError as e:
             tmb.showinfo("Unimplemented!", "This function is not yet implemented.")
         except Exception as e2:
             tmb.showinfo("Error", str(e2))
 
-    def close_threads(self):
-        self.main_class.running = False
+    def protected_graph_online(self):
+        try:
+            self.make_online_graph()
+        except UnimplementedError as e:
+            tmb.showinfo("Unimplemented!", "This function is not yet implemented.")
+        except Exception as e2:
+            tmb.showinfo("Error", str(e2))
+
+    def close_window(self):
         self.top.destroy()
 
-    def update_ui_next(self, time):
-        self.next_run.set(str(time))
+    def update_ui_next_timer(self, next_test_time):
+        self.next_run.set(str(next_test_time))
 
-    def set_ui_values(self, run_time, speed):
+    def update_ui_test_results(self, run_time, speed):
         self.last_completed_run.set(run_time)
         self.latest_speed.set(speed)
 
-    def set_status(self, inStat):
-        self.status.set(inStat)
+    def set_status(self, new_stat):
+        self.status.set(new_stat)
 
-    def set_delay(self, newDelay):
-        self.delaynum = newDelay
-        self.delay.set(newDelay)
+    def change_delay(self, new_delay):
+        self.delay.set(new_delay)

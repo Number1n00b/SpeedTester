@@ -18,5 +18,5 @@ setup(
     name = "Test",
     version = "1.0",
     options = {"build_exe": {"includes": includes, "include_files": include_files}},
-    executables = [Executable("../src/controller/SpeedTester.py", base="Win32GUI")]
+    executables = [Executable("../src/controller/main.py", base="Win32GUI")]
 )

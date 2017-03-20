@@ -1262,7 +1262,7 @@ def printer(string, quiet=False, debug=False, **kwargs):
         print_(out, **kwargs)
 
 
-def shell(signal):
+def shell():
     """Run the full speedtest.net test"""
 
     global SHUTDOWN_EVENT, SOURCE, SCHEME, DEBUG
@@ -1310,7 +1310,9 @@ def shell(signal):
     if quiet or debug:
         callback = do_nothing
     else:
-        callback = print_dots
+        # Changed by Christian to stop output.
+        callback = do_nothing
+        # callback = print_dots
 
     # printer('Retrieving speedtest.net configuration...', quiet)
     try:
@@ -1425,8 +1427,7 @@ def shell(signal):
 
 def main():
     try:
-        sig = signal.signal(signal.SIGINT, handler=ctrl_c)
-        shell(sig)
+        shell()
     except KeyboardInterrupt:
         pass
         # print_('\nCancelling...')
